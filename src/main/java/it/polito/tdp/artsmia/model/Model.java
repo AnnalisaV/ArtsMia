@@ -72,9 +72,8 @@ public class Model {
 		}
 		
 		System.out.println(String.format("Grafo creato! Numero vertici %d , numero archi %d", this.grafo.vertexSet().size(), this.grafo.edgeSet().size()));
-		
-		
 	}
+
 	
 	public int nVertici(){
 		return this.grafo.vertexSet().size(); 
