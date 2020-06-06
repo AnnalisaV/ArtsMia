@@ -7,6 +7,7 @@ package it.polito.tdp.artsmia;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import it.polito.tdp.artsmia.model.ArtObject;
 import it.polito.tdp.artsmia.model.Model;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -48,11 +49,44 @@ public class FXMLController {
     @FXML
     void doAnalizzaOggetti(ActionEvent event) {
 
+    	this.txtResult.clear();
+    	this.txtResult.appendText("Creazione grafo.... \n");
+    	model.creaGrafo();
+    	this.txtResult.appendText("Grafo creato! "+model.nVertex()+" vertici e "+model.nArchi()+" archi \n");
+    	
+    	//a a questo punto posso anche fare altre cose 
+    	this.btnCalcolaComponenteConnessa.setDisable(false);
     }
 
     @FXML
     void doCalcolaComponenteConnessa(ActionEvent event) {
 
+    	txtResult.clear();
+    	if (this.txtObjectId.getLength()==0) {
+    		txtResult.appendText("ERRORE : inserire un id \n");
+    		return; 
+    	}
+    	
+    	int objectId=0; 
+    	try {
+    		objectId= Integer.parseInt(this.txtObjectId.getText()); 
+    	}
+    	catch(NumberFormatException nfe) {
+    		txtResult.appendText("ERRORE : inserire un id numerico\n");
+    		return; 
+    	}
+    	
+    	boolean esiste =model.esisteArtObject(objectId);
+    	if(esiste==false) {
+    		txtResult.appendText("ERRORE : ArtObject inesistente \n");
+    		return;
+    	}
+    	txtResult.appendText("Vertici connessi "+model.visita(objectId).size()+"\n");
+    	for (ArtObject ao : model.visita(objectId)) {
+    		txtResult.appendText(ao.toString()+"\n");
+    	}
+    	
+    	
     }
 
     @FXML
@@ -73,5 +107,6 @@ public class FXMLController {
     
     public void setModel(Model model) {
     	this.model = model;
+    	this.btnCalcolaComponenteConnessa.setDisable(true); //inizialmente non posso cliccare 
     }
 }
